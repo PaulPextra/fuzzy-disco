@@ -55,5 +55,5 @@ Return a student(standard output) telling him how much (s)he has spe
 
 # range() function - 
 # Example:
-print(list(range(1,6,2)))
+# print(list(range(1,6,2)))
 

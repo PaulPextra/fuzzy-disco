@@ -15,29 +15,29 @@
 
 
 # Exercise:
-import random
-import time
-print("Welcome To Rock Paper Scissor Game\n>>")
-time.sleep(2)
-word_list = ["Rock", "Paper", "Scissors"]
-user = input(f"Enter a Word from:\n{word_list}\n").title()
-print("Waiting for the computer to make a choice...")
-time.sleep(2)
-computer = random.choice(word_list)
+# import random
+# import time
+# print("Welcome To Rock Paper Scissor Game\n>>")
+# time.sleep(2)
+# word_list = ["Rock", "Paper", "Scissors"]
+# user = input(f"Enter a Word from:\n{word_list}\n").title()
+# print("Waiting for the computer to make a choice...")
+# time.sleep(2)
+# computer = random.choice(word_list)
 
-if (computer == "Paper" and user == "Rock" or 
-    computer == "Scissors" and user == "Paper" or 
-    computer == "Rock" and  user == "Scissors"):
-    print("Computer Wins!")
-elif (user == "Paper" and computer == "Rock" or 
-    user == "Scissors" and computer == "Paper" or 
-    user == "Rock" and  computer == "Scissors"):
-    print("You Win!")
-elif computer == user:
-    print("There's a Tie, Play Again!")
-elif user != word_list:
-    print("Word out of the list.")
-else:
-    print("You Lost the Game!")
+# if (computer == "Paper" and user == "Rock" or 
+#     computer == "Scissors" and user == "Paper" or 
+#     computer == "Rock" and  user == "Scissors"):
+#     print("Computer Wins!")
+# elif (user == "Paper" and computer == "Rock" or 
+#     user == "Scissors" and computer == "Paper" or 
+#     user == "Rock" and  computer == "Scissors"):
+#     print("You Win!")
+# elif computer == user:
+#     print("There's a Tie, Play Again!")
+# elif user != word_list:
+#     print("Word out of the list.")
+# else:
+#     print("You Lost the Game!")
 
 
