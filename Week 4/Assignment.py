@@ -5,10 +5,10 @@ isvalid = True
 password = input('Enter a password:\n')
 
 if len(password) < 6:
-     print('Password should be at least 6')
+     print('Password length should be at least 6')
      isvalid = False
 if len(password) > 16:
-     print('Password should not be greater than 16')
+     print('Password length should not be greater than 16')
      isvalid = False
 
 if not any(char.isdigit() for char in password):
