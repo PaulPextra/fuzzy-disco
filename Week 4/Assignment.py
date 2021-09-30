@@ -45,11 +45,11 @@ print('\n')
 print('Checking if the Triangle is an Equilateral, an Isosceles, or a Scalene Triangle...')
 time.sleep(2)
 print('\n')
-if (Side_A is Side_B and Side_A is Side_C):
+if (Side_A is Side_B and Side_B is Side_C):
     print('The Triangle is an Equilateral Triangle')
-elif (Side_A is Side_B and Side_A is not Side_C or
+elif (Side_A is Side_B and Side_B is not Side_C or
     Side_B is Side_C and Side_B is not Side_A or
-    Side_A is Side_C and Side_A is not Side_B):
+    Side_C is Side_A and Side_C is not Side_B):
     print('The Triangle is an Isosceles Triangle')
 else:
     print('The Triangle is a Scalene Triangle')
