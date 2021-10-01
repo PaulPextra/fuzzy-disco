@@ -23,22 +23,22 @@ a list of the total prices of items bought in 7 days seperated by a comma.
 Return a student(standard output) telling him how much (s)he has spe
 '''
 
-# price_list = input("Enter a list of numbers:\n").split(",")
-# total = list(map(lambda string : int(string), price_list))
-# sum_total = sum(total)
-# average = sum_total / len(total)
-# print(sum_total)
-# print(average)
+price_list = input("Enter a list of numbers:\n").split(",")
+total = list(map(lambda string : int(string), price_list))
+sum_total = sum(total)
+average = sum_total / len(total)
+print(sum_total)
+print(average)
 
 # zip() function - 
 
 # Example:
-# c = ["002", "014", "029"]
-# p = [2000, 4000, 2015]
-# d = dict(zip(c, p)) # converting to dictionary
-# l = list(zip(d, p)) # converting to list
-# print(d)
-# print(l)
+c = ["002", "014", "029"]
+p = [2000, 4000, 2015]
+d = dict(zip(c, p)) # converting to dictionary
+l = list(zip(d, p)) # converting to list
+print(d)
+print(l)
 
 # enumerate() function - 
 
