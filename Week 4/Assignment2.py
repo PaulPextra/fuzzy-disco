@@ -9,7 +9,7 @@ Build a simple bank program that:
 5. Can transfer money to other customers in the bank program
 '''
 import random, time
-user_data = {}
+user_data = {"12345":"1234567890"}
 balance = 0
 validPin = True
 
@@ -36,8 +36,9 @@ for i in range(100):
         else:
             print("\nThere Is No Active User With This Pin!\n")
             continue
+
         # ATM Options:
-        for i in range(4):
+        for i in range(100):
             con = input("1. Withdraw\n2. Deposit\n3. Transfer\n4. Check Balance\n0. Quit!\n>>> ")
             
             # Withdrawal Option
@@ -54,10 +55,13 @@ for i in range(100):
                     time.sleep(2)
                     print(f"Transaction Successful!\n\nYour Account Balance is ${balance}\n")
                     time.sleep(1)
-                    con = input("Press 'y' to Continue and Any key to Quit!\n\n>>> ").lower()
+                    con = input("Press 'y' to Continue or 0 to Quit!\n\n>>> ").lower()
                     print("\n")
                     if con == 'y':
                         continue
+                    elif con == "0":
+                        print("Thank You for Banking With Us!\n")
+                        break
                     else:
                         print("please select a valid option!\n")
                         break
@@ -70,10 +74,13 @@ for i in range(100):
                 time.sleep(2)
                 print(f"Transaction Successful!\n\nYour Account Balance is ${balance}\n")
                 time.sleep(1)
-                con = input("Press 'y' to Continue and Any key to Quit!\n\n>>> ").lower()
+                con = input("Press 'y' to Continue or 0 to Quit!\n\n>>> ").lower()
                 print("\n")
                 if con == 'y':
                     continue
+                elif con == "0":
+                    print("Thank You for Banking With Us!\n")
+                    break
                 else:
                     print("please select a valid option!\n")
                     break
@@ -83,17 +90,19 @@ for i in range(100):
                 transfer = int(input("Enter Amount:\n>>> "))
                 recipient = input("Enter Recipient Account Number:\n>>> ")
                 if (recipient == user_data.get(Pin)):
-                    user_data[recipient].update({"balance": balance})
                     print("\nTransaction in Progress...\n")
                     time.sleep(2)
                     print("Transaction Successful!")
                 else:
                     print("Transaction Failed!\n\nAccount Number Not Found in Our Data-Base.")
                     time.sleep(1)
-                    con = input("Press 'y' to Continue and Any key to Quit!\n\n>>> ").lower()
+                    con = input("Press 'y' to Continue or 0 to Quit!\n\n>>> ").lower()
                     print("\n")
                 if con == 'y':
                     continue
+                elif con == "0":
+                    print("Thank You for Banking With Us!\n")
+                    break
                 else:
                     print("please select a valid option!\n")
                     break
@@ -104,10 +113,13 @@ for i in range(100):
                 time.sleep(2)
                 print(f"Your Account Balance is: ${balance}\n")
                 time.sleep(1)
-                con = input("Press 'y' to Continue and Any key to Quit!\n\n>>> ").lower()
+                con = input("Press 'y' to Continue or 0 to Quit!\n\n>>> ").lower()
                 print("\n")
                 if con == 'y':
                     continue
+                elif con == "0":
+                    print("Thank You for Banking With Us!\n")
+                    break
                 else:
                     print("please select a valid option!\n")
                     break
@@ -144,6 +156,7 @@ for i in range(100):
                 print(f"Your Account Number is {Account_number}\n")
                 user_data[Pin] = Account_number
                 break
+
         # Continue Option to Login/ Create Account
         con = input("Press 'y' to Continue and Any key to Quit!\n>>> ").lower()
         if con == 'y':
