@@ -9,8 +9,7 @@ Build a simple bank program that:
 5. Can transfer money to other customers in the bank program
 '''
 import random, time
-user_data = {"12345":"1234567890"}
-balance = 0
+user_data = {}
 validPin = True
 
 for i in range(100):
@@ -25,7 +24,7 @@ for i in range(100):
         Account_number = input("Enter Your Account Number:\n>>> ").strip()
         time.sleep(2)
         if Pin in user_data.keys():
-            actual_account_number = user_data.get(Pin)
+            actual_account_number = user_data[Pin]["Account Number"]
 
             if actual_account_number == Account_number:
                 print("\nLogin Successful!\n") 
@@ -45,13 +44,13 @@ for i in range(100):
             time.sleep(1)
             if con == "1":
                 withdraw = int(input("Enter Amount:\n>>> "))
-                if withdraw > balance:
+                if withdraw > user_data[Pin]["Balance"]:
                     print("\nTransaction in Progress...\n")
                     time.sleep(2)
                     print("Insufficient Fund!")
                     continue
                 else:
-                    balance = balance - withdraw
+                    user_data[Pin]["Balance"] -= withdraw
                     time.sleep(2)
                     print(f"Transaction Successful!\n\nYour Account Balance is ${balance}\n")
                     time.sleep(1)
@@ -63,16 +62,16 @@ for i in range(100):
                         print("Thank You for Banking With Us!\n")
                         break
                     else:
-                        print("please select a valid option!\n")
+                        print("Invalid option!\n")
                         break
 
             # Deposit Option
             elif con == "2":
                 deposit = int(input("Enter Amount:\n>>> "))
-                balance = balance + deposit
+                user_data[Pin]["Balance"] += deposit
                 print("\nTransaction in Progress...\n")
                 time.sleep(2)
-                print(f"Transaction Successful!\n\nYour Account Balance is ${balance}\n")
+                print(f"Transaction Successful!\n\nYour Account Balance is ${user_data[Pin]['Balance']}\n")
                 time.sleep(1)
                 con = input("Press 'y' to Continue or 0 to Quit!\n\n>>> ").lower()
                 print("\n")
@@ -82,7 +81,7 @@ for i in range(100):
                     print("Thank You for Banking With Us!\n")
                     break
                 else:
-                    print("please select a valid option!\n")
+                    print("Invalid option!\n")
                     break
 
             # Transfer Option
@@ -104,14 +103,14 @@ for i in range(100):
                     print("Thank You for Banking With Us!\n")
                     break
                 else:
-                    print("please select a valid option!\n")
+                    print("Invalid option!\n")
                     break
 
             # Check Balance Option
             elif con == "4":
                 print("\nTransaction in Progress...\n")
                 time.sleep(2)
-                print(f"Your Account Balance is: ${balance}\n")
+                print(f"Your Account Balance is: ${user_data[Pin]['Balance']}\n")
                 time.sleep(1)
                 con = input("Press 'y' to Continue or 0 to Quit!\n\n>>> ").lower()
                 print("\n")
@@ -121,7 +120,7 @@ for i in range(100):
                     print("Thank You for Banking With Us!\n")
                     break
                 else:
-                    print("please select a valid option!\n")
+                    print("Invalid option!\n")
                     break
 
             # Quit Option
@@ -154,7 +153,9 @@ for i in range(100):
                 time.sleep(2)
                 print("Account Number Successfully Generated!")
                 print(f"Your Account Number is {Account_number}\n")
-                user_data[Pin] = Account_number
+                user_data[Pin] = {}
+                user_data[Pin]["Account Number"] = Account_number
+                user_data[Pin]["Balance"] = 0
                 break
 
         # Continue Option to Login/ Create Account
