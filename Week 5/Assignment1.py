@@ -1,12 +1,11 @@
 
 '''
-# Question.
-Build a simple bank program that:
-1. Allows customers to create account with pin and automatically generate account number.
-2. Customers can login using their account number and pin
-3. Can withdraw money
-4. Can deposit money
-5. Can transfer money to other customers in the bank program
+# Bank App Modification.
+1. Allow user to check account balance
+2. Get the 5 most recent transactions
+3. Log transaction details (Debit/Credit)
+4. Validate pin before saving
+5. Keep user logged in till he logs out.
 '''
 import random, time 
 from datetime import datetime

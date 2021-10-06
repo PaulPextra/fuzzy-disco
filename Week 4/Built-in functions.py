@@ -30,7 +30,7 @@ average = sum_total / len(total)
 print(sum_total)
 print(average)
 
-# zip() function - 
+# zip() function - This takes in two iterables and pairs the items in the iterable together.
 
 # Example:
 c = ["002", "014", "029"]
@@ -40,20 +40,21 @@ l = list(zip(d, p)) # converting to list
 print(d)
 print(l)
 
-# enumerate() function - 
+# enumerate() function - This functions zips a counter with the items in an iterable.
 
 # Example:
-# enumerate_c = list(enumerate(c))
-# print(enumerate_c)
+enumerate_c = list(enumerate(c))
+print(enumerate_c)
 
-# filter() function - 
+# filter() function - This filters an iterable in accordance with a specified function. It returns a list of the items that returned True in that function.
 
 # Example:
-# mylist = [2,3,5,7,8,20,4,1,9]
-# filtered_list = list(filter(lambda x : x % 2 != 0, mylist))
-# print(filtered_list)
+mylist = [2,3,5,7,8,20,4,1,9]
+filtered_list = list(filter(lambda x : x % 2 != 0, mylist))
+print(filtered_list)
 
-# range() function - 
+# range() function - This function returns a sequence of numbers.Its general sequence is range(start, stop, step).
+
 # Example:
-# print(list(range(1,6,2)))
+print(list(range(1,6,2)))
 
