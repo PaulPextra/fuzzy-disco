@@ -12,7 +12,7 @@ keep_running = True
 date = datetime.now()
 now = date.strftime('%x')
 
-def update_transaction_record(Amount, Trans_type, Transaction, Account_number):
+def update_transaction_log(Amount, Trans_type, Transaction, Account_number):
     """This function takes in the amount and other transaction details. Then it updates the transaction dictionary. It doesn't return anything."""
     
     trans_data = {
@@ -44,73 +44,54 @@ while keep_running:
         if (len(Pin) < 4) or (len(Pin) > 4):
             print("Pin should be 4 digits!\n")
             continue
-        account_details = user_data.get(Account_number, False)
 
+        # Reading User Data from Text File
+        # with open("customer.txt", "r") as login:
+        #     # login_data = login.read()
+        #     # str_dict = ast.literal_eval(login_data)
+
+        account_details = user_data.get(Account_number, False)
         if account_details and account_details.get('Pin') == Pin:
             time.sleep(2)
             print(f"\nWelcome, {user_data[Account_number]['First Name']}!\n")
+        else:
+            time.sleep(1)
+            print("Transaction Failed!\n\nNo active customer for this account number.")
             
-            logged_in = True
+        logged_in = True
 
-            while logged_in: 
+        while logged_in: 
 
-                # ATM Options:
-                progress = input("1. Withdraw\n2. Deposit\n3. Transfer\n4. Check Balance\n5. Account Statement\n0. Logout!\n>>> ")
-                
-                # Withdrawal Option
-                time.sleep(1)
-                if progress == "1":
-                    Amount = float(input("Enter Amount:\n>>> "))
-                    if Amount >= user_data[Account_number]['Balance']:
-                        print("\nTransaction in Progress...\n")
-                        time.sleep(2)
-                        print("Insufficient Fund!\n")
+            # ATM Options:
+            progress = input("1. Withdraw\n2. Deposit\n3. Transfer\n4. Check Balance\n5. Account Statement\n0. Logout!\n>>> ")
+            
+            # Withdrawal Option
+            time.sleep(1)
+            if progress == "1":
+                Amount = float(input("Enter Amount:\n>>> "))
+                if Amount >= user_data[Account_number]['Balance']:
+                    print("\nTransaction in Progress...\n")
+                    time.sleep(2)
+                    print("Insufficient Fund!\n")
+                    time.sleep(1)
+                    print("Session Expired!\n")
+
+                    progress = input("Press 'y' to Continue or 0 to Logout!\n\n>>> ").lower()
+                    print("\n")
+                    if progress == 'y':
+                        continue
+                    elif progress == "0":
                         time.sleep(1)
-                        print("Session Expired!\n")
-
-                        progress = input("Press 'y' to Continue or 0 to Logout!\n\n>>> ").lower()
-                        print("\n")
-                        if progress == 'y':
-                            continue
-                        elif progress == "0":
-                            time.sleep(1)
-                            print("Thank You for Banking With Us!\n")
-                            logged_in = False
-                        else:
-                            print("Invalid option!\n")
-                            break
+                        print("Thank You for Banking With Us!\n")
+                        logged_in = False
                     else:
-                        user_data[Account_number]["Balance"] -= Amount
+                        print("Invalid option!\n")
+                        break
+                else:
+                    user_data[Account_number]["Balance"] -= Amount
 
-                        #save transaction detail
-                        update_transaction_record(Amount,"Debit", "Withdrawl", Account_number)
-
-                        # Storing Customer Transaction Log to a text file
-                        with open("customer.txt", "a") as log:
-                            log.write(f"{transaction_log}\n")
-
-                        print("\nTransaction in Progress...\n")
-                        time.sleep(2)
-                        print(f"Debit!\nAmt:NGN{Amount}\nTime:{now}\nAvailable Balance:NGN{user_data[Account_number]['Balance']}\n")
-                        time.sleep(1)
-                        progress = input("Press 'y' to Continue or 0 tocreate account Logout!\n\n>>> ").lower()
-                        print("\n")
-                        if progress == 'y':
-                            time.sleep(1)
-                            continue
-                        elif progress == "0":
-                            time.sleep(1)
-                            print("Thank You for Banking With Us!\n")
-                            logged_in = False
-                        else:
-                            print("Invalid option!\n")
-                            break
-
-                # Deposit Option
-                elif progress == "2":
-                    Amount = float(input("Enter Amount:\n>>> "))
-                    user_data[Account_number]["Balance"] += Amount
-                    update_transaction_record(Amount,"Credit", "Deposit", Account_number)
+                    #save transaction detail
+                    update_transaction_log(Amount,"Debit", "Withdrawl", Account_number)
 
                     # Storing Customer Transaction Log to a text file
                     with open("customer.txt", "a") as log:
@@ -118,9 +99,9 @@ while keep_running:
 
                     print("\nTransaction in Progress...\n")
                     time.sleep(2)
-                    print(f"Credit!\nAmt:NGN{Amount}\nTime:{now}\nAvailable Balance:NGN{user_data[Account_number]['Balance']}\n")
+                    print(f"Debit!\nAmt:NGN{Amount}\nTime:{now}\nAvailable Balance:NGN{user_data[Account_number]['Balance']}\n")
                     time.sleep(1)
-                    progress = input("Press 'y' to Continue or 0 to Logout!\n\n>>> ").lower()
+                    progress = input("Press 'y' to Continue or 0 tocreate account Logout!\n\n>>> ").lower()
                     print("\n")
                     if progress == 'y':
                         time.sleep(1)
@@ -133,116 +114,134 @@ while keep_running:
                         print("Invalid option!\n")
                         break
 
-                # Transfer Option
-                elif progress == "3":
-                    Amount = float(input("Enter Amount:\n>>> "))
-                    recipient_account = input("Enter Recipient Account Number:\n>>> ")
-                    recipient = user_data.get(recipient_account, False)
+            # Deposit Option
+            elif progress == "2":
+                Amount = float(input("Enter Amount:\n>>> "))
+                user_data[Account_number]["Balance"] += Amount
+                update_transaction_log(Amount,"Credit", "Deposit", Account_number)
 
-                    if recipient:
-                        if Amount >= user_data[Account_number]['Balance']:
-                            time.sleep(1)
-                            print("Insufficient funds!")
-                        else:
-                            user_data[Account_number]['Balance'] -= Amount
+                # Storing Customer Transaction Log to a text file
+                with open("customer.txt", "a") as log:
+                    log.write(f"{transaction_log}\n")
 
-                            #save transaction detail
-                            update_transaction_record(Amount,"Debit", "Transfer", Account_number)
-
-                            # Storing Customer Transaction Log to a text file
-                            with open("customer.txt", "a") as log:
-                                log.write(f"{transaction_log}\n")
-
-                            recipient['Balance'] += Amount
-
-                            #save transaction detail
-                            update_transaction_record(Amount,"Credit", "Transfer", recipient_account)
-
-                            # Storing Customer Transaction Log to a text file
-                            with open("customer.txt", "w") as log:
-                                log.write(f"{transaction_log}\n")
-                                
-                            print("\nTransaction in Progress...\n")
-                            time.sleep(2)
-                            print(f"Transfer Successful!\nDebit!\nAmt:NGN{Amount}\nTime:{now}\nAvailable Balance:NGN{user_data[Account_number]['Balance']}\n")
-
-                            time.sleep(1)
-                            progress = input("Press 'y' to Continue or 0 to Logout!\n\n>>> ").lower()
-                            print("\n")
-                            if progress == 'y':
-                                time.sleep(1)
-                                continue
-                            elif progress == "0":
-                                time.sleep(1)
-                                print("Thank You for Banking With Us!\n")
-                                logged_in = False
-                            else:
-                                print("Invalid option!\n")
-                                break
-                    else:
-                        time.sleep(1)
-                        print("Transaction Failed!\n\nNo active customer for this account number.")
-                        
-
-                # Check Balance Option
-                elif progress == "4":
-                    print("\nTransaction in Progress...\n")
-                    time.sleep(2)
-                    print(f"Your Account Balance is NGN{user_data[Account_number]['Balance']}\n")
+                print("\nTransaction in Progress...\n")
+                time.sleep(2)
+                print(f"Credit!\nAmt:NGN{Amount}\nTime:{now}\nAvailable Balance:NGN{user_data[Account_number]['Balance']}\n")
+                time.sleep(1)
+                progress = input("Press 'y' to Continue or 0 to Logout!\n\n>>> ").lower()
+                print("\n")
+                if progress == 'y':
                     time.sleep(1)
-                    progress = input("Press 'y' to Continue or 0 to Logout!\n\n>>> ").lower()
-                    print("\n")
-                    if progress == 'y':
-                        time.sleep(1)
-                        continue
-                    elif progress == "0":
-                        time.sleep(1)
-                        print("Thank You for Banking With Us!\n")
-                        logged_in = False
-                    else:
-                        print("Invalid option!\n")
-                        break
-                # Print Account Statement Option
-                elif progress == "5":
-                    if len(transaction_log[Account_number]) > 0:
-                        last_5_transactions = transaction_log[Account_number][-5:]
-
-                        print("\nTransaction in Progress...\n")
-                        time.sleep(2)
-                        print(f"Hello {firstName}, Here is Your Account Statement:\n")
-                        for transaction in last_5_transactions:
-                                print("Amount: ", transaction['Amount'])
-                                print("Transaction Type: ", transaction['Trans_type'])
-                                print("Transaction Ref.: ", transaction['Transaction'])
-                    else:
-                        print("You have not made any transactions. Please make a transaction.")
-                    time.sleep(1)
-                    progress = input("Press 'y' to Continue or 0 to Logout!\n\n>>> ").lower()
-                    print("\n")
-                    if progress == 'y':
-                        time.sleep(1)
-                        continue
-                    elif progress == "0":
-                        time.sleep(1)
-                        print("Thank You for Banking With Us!\n")
-                        logged_in = False
-                    else:
-                        print("Invalid option!\n")
-                        break
-
-                # Logout Option
+                    continue
                 elif progress == "0":
                     time.sleep(1)
                     print("Thank You for Banking With Us!\n")
                     logged_in = False
                 else:
-                    print("Please Enter a Valid Option!\n")
-                continue
-                
-        else:
-            print("\nThere Is No Active User With This Pin!\n")
-            continue
+                    print("Invalid option!\n")
+                    break
 
+            # Transfer Option
+            elif progress == "3":
+                Amount = float(input("Enter Amount:\n>>> "))
+                recipient_account = input("Enter Recipient Account Number:\n>>> ")
+                recipient = user_data.get(recipient_account, False)
+
+                if recipient:
+                    if Amount >= user_data[Account_number]['Balance']:
+                        time.sleep(1)
+                        print("Insufficient funds!")
+                    else:
+                        user_data[Account_number]['Balance'] -= Amount
+
+                        #save transaction detail
+                        update_transaction_log(Amount,"Debit", "Transfer", Account_number)
+
+                        # Storing Customer Transaction Log to a text file
+                        with open("customer.txt", "a") as log:
+                            log.write(f"{transaction_log}\n")
+
+                        recipient['Balance'] += Amount
+
+                        #save transaction detail
+                        update_transaction_log(Amount,"Credit", "Transfer", recipient_account)
+
+                        # Storing Customer Transaction Log to a text file
+                        with open("customer.txt", "w") as log:
+                            log.write(f"{transaction_log}\n")
+                            
+                        print("\nTransaction in Progress...\n")
+                        time.sleep(2)
+                        print(f"Transfer Successful!\nDebit!\nAmt:NGN{Amount}\nTime:{now}\nAvailable Balance:NGN{user_data[Account_number]['Balance']}\n")
+
+                        time.sleep(1)
+                        progress = input("Press 'y' to Continue or 0 to Logout!\n\n>>> ").lower()
+                        print("\n")
+                        if progress == 'y':
+                            time.sleep(1)
+                            continue
+                        elif progress == "0":
+                            time.sleep(1)
+                            print("Thank You for Banking With Us!\n")
+                            logged_in = False
+                        else:
+                            print("Invalid option!\n")
+                            break
+                
+            # Check Balance Option
+            elif progress == "4":
+                print("\nTransaction in Progress...\n")
+                time.sleep(2)
+                print(f"Your Account Balance is NGN{user_data[Account_number]['Balance']}\n")
+                time.sleep(1)
+                progress = input("Press 'y' to Continue or 0 to Logout!\n\n>>> ").lower()
+                print("\n")
+                if progress == 'y':
+                    time.sleep(1)
+                    continue
+                elif progress == "0":
+                    time.sleep(1)
+                    print("Thank You for Banking With Us!\n")
+                    logged_in = False
+                else:
+                    print("Invalid option!\n")
+                    break
+            # Print Account Statement Option
+            elif progress == "5":
+                if len(transaction_log[Account_number]) > 0:
+                    last_5_transactions = transaction_log[Account_number][-5:]
+
+                    print("\nTransaction in Progress...\n")
+                    time.sleep(2)
+                    print(f"Hello {user_data[Account_number]['First Name']}, Here is Your Account Statement:\n")
+                    for transaction in last_5_transactions:
+                            print("Amount: ", transaction['Amount'])
+                            print("Transaction Type: ", transaction['Trans_type'])
+                            print("Transaction Ref.: ", transaction['Transaction'])
+                else:
+                    print("You have not made any transactions. Please make a transaction.")
+                time.sleep(1)
+                progress = input("Press 'y' to Continue or 0 to Logout!\n\n>>> ").lower()
+                print("\n")
+                if progress == 'y':
+                    time.sleep(1)
+                    continue
+                elif progress == "0":
+                    time.sleep(1)
+                    print("Thank You for Banking With Us!\n")
+                    logged_in = False
+                else:
+                    print("Invalid option!\n")
+                    break
+
+            # Logout Option
+            elif progress == "0":
+                time.sleep(1)
+                print("Thank You for Banking With Us!\n")
+                logged_in = False
+            else:
+                print("Please Enter a Valid Option!\n")
+            continue
         
     # Signup/Create Account Section
 
@@ -271,7 +270,7 @@ while keep_running:
             with open("customer.txt", "a") as Data:
                 Data.write(f"{user_data}\n")
 
-            #Create Empty Transaction Record
+            #Create Empty Transaction log
             transaction_log[Account_number] = []
 
             time.sleep(1)
