@@ -56,7 +56,7 @@ while keep_running:
             print(f"\nWelcome, {user_data[Account_number]['First Name']}!\n")
         else:
             time.sleep(1)
-            print("Transaction Failed!\n\nNo active customer for this account number.")
+            print("Login Failed!\n\nNo active customer for this account number.")
             
         logged_in = True
 
