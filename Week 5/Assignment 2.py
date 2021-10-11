@@ -2,6 +2,7 @@
 from datetime import datetime
 import random, time 
 import ast
+import json
 import os
 os.system("cls")
 
@@ -150,7 +151,8 @@ while keep_running:
                 if recipient:
                     if Amount >= user_data[Account_number]['Balance']:
                         time.sleep(1)
-                        print("Insufficient funds!")
+                        print("\nInsufficient funds!\n")
+                        time.sleep(1)
                     else:
                         user_data[Account_number]['Balance'] -= Amount
 
@@ -167,7 +169,7 @@ while keep_running:
                         update_transaction_log(Amount,"Credit", "Transfer", recipient_account)
 
                         # Storing Customer Transaction Log to a text file
-                        with open("customer.txt", "w") as log:
+                        with open("customer.txt", "a") as log:
                             log.write(f"{transaction_log}\n")
                             
                         print("\nTransaction in Progress...\n")
@@ -217,11 +219,11 @@ while keep_running:
                     for transaction in last_5_transactions:
                             print("Amount: ", transaction['Amount'])
                             print("Transaction Type: ", transaction['Trans_type'])
-                            print("Transaction Ref.: ", transaction['Transaction'])
+                            print("Transaction Ref.: ", transaction['Transaction'], "\n")
                 else:
                     print("You have not made any transactions. Please make a transaction.")
                 time.sleep(1)
-                progress = input("Press 'y' to Continue or 0 to Logout!\n\n>>> ").lower()
+                progress = input("\nPress 'y' to Continue or 0 to Logout!\n\n>>> ").lower()
                 print("\n")
                 if progress == 'y':
                     time.sleep(1)
@@ -246,7 +248,10 @@ while keep_running:
     # Signup/Create Account Section
 
     elif Activity == "create account":
-        for i in range(100):
+
+        sign_up = True
+
+        while sign_up:
             firstName = input("First Name:\n>>> ").title()
             lastName = input("Last Name:\n>>> ").title()
             Pin = input("Enter a 4 digit pin:\n>>> ")
@@ -280,7 +285,7 @@ while keep_running:
             print(f"Your Account Number is {Account_number}\nYour current balance is NGN0.\nPlease login to perform other transactions.\nThank You!\n")
             break
 
-        # Continue Option to Login/ Create Account
+        # Progress Option to Login/ Create Account
         progress = input("Press 'y' to Continue and Any key to Quit!\n>>> ").lower()
         if progress == 'y':
             time.sleep(1)
