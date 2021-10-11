@@ -101,7 +101,7 @@ while keep_running:
                     time.sleep(2)
                     print(f"Debit!\nAmt:NGN{Amount}\nTime:{now}\nAvailable Balance:NGN{user_data[Account_number]['Balance']}\n")
                     time.sleep(1)
-                    progress = input("Press 'y' to Continue or 0 tocreate account Logout!\n\n>>> ").lower()
+                    progress = input("Press 'y' to Continue or 0 to Logout!\n\n>>> ").lower()
                     print("\n")
                     if progress == 'y':
                         time.sleep(1)
