@@ -2,7 +2,6 @@
 from datetime import datetime
 import random, time 
 import ast
-import json
 import os
 os.system("cls")
 
