@@ -1,6 +1,5 @@
 import time
 import ast
-from types import new_class
 
 def password_isvaid(password):
     if (len(password) < 6) or (len(password)>16):
