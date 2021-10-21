@@ -1,3 +1,0 @@
-This is another session of learning.
-In conuation with the lessons on file I/O
-i'm learning how to write to my file using the 'with' keyword.
