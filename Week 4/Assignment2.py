@@ -8,190 +8,125 @@ Build a simple bank program that:
 4. Can deposit money
 5. Can transfer money to other customers in the bank program
 '''
-import random, time 
-from datetime import datetime
+import random, time
 user_data = {}
-# transaction_log = {}
 validPin = True
-logged_in = True
-keep_running = True
-date = datetime.now()
-now = date.strftime('%x')
 
-while keep_running:
+for i in range(100):
     Activity = input("Login or Create Account?\n>>> ").lower()
 
     # User Login Section
     if Activity == "login":
-        Account_number = input("Enter Your Account Number:\n>>> ").strip()
         Pin = input("Enter Your Pin:\n>>> ").strip()
-        if (len(Pin) < 4) or (len(Pin) > 4):
-            print("Pin should be 4 digits!\n")
+        if (len(Pin) < 5) or (len(Pin) > 5):
+            print("Pin shouldn't be greater/less than 5 digits!\n")
             continue
-        account_details = user_data.get(Account_number, False)
+        Account_number = input("Enter Your Account Number:\n>>> ").strip()
+        time.sleep(2)
+        if Pin in user_data.keys():
+            actual_account_number = user_data[Pin]["Account Number"]
 
-        if account_details and account_details.get('Pin') == Pin:
-            time.sleep(2)
-            print(f"\nWelcome, {user_data[Account_number]['First Name']}!\n") 
+            if actual_account_number == Account_number:
+                print("\nLogin Successful!\n") 
+                time.sleep(1)
+            else:
+                print("Wrong Pin/Account Number!\n")
+                continue
         else:
             print("\nThere Is No Active User With This Pin!\n")
             continue
 
         # ATM Options:
-        while logged_in:
-            progress = input("1. Withdraw\n2. Deposit\n3. Transfer\n4. Check Balance\n5. Account Statement\n0. Logout!\n>>> ")
+        for i in range(100):
+            con = input("1. Withdraw\n2. Deposit\n3. Transfer\n4. Check Balance\n0. Quit!\n>>> ")
             
             # Withdrawal Option
             time.sleep(1)
-            if progress == "1":
-                Amount = float(input("Enter Amount:\n>>> "))
-                if Amount >= user_data[Account_number]['Balance']:
+            if con == "1":
+                withdraw = int(input("Enter Amount:\n>>> "))
+                if withdraw > user_data[Pin]["Balance"]:
                     print("\nTransaction in Progress...\n")
                     time.sleep(2)
-                    print("Insufficient Fund!\n")
-                    time.sleep(1)
-                    print("Session Expired!\n")
-
-                    progress = input("Press 'y' to Continue or 0 to Logout!\n\n>>> ").lower()
-                    print("\n")
-                    if progress == 'y':
-                        continue
-                    elif progress == "0":
-                        time.sleep(1)
-                        print("Thank You for Banking With Us!\n")
-                        logged_in = False
-                    else:
-                        print("Invalid option!\n")
-                        break
+                    print("Insufficient Fund!")
+                    continue
                 else:
-                    user_data[Account_number]["Balance"] -= Amount
-                    transaction_log = {}
-                    transaction_log[Account_number] = {}
-                    data_ = [("Amount",Amount),("Alert Type","Debit"),("Transaction Type","Withdrawal")]
-                    transaction_log[Account_number].update(data_)
-                    print("\nTransaction in Progress...\n")
+                    user_data[Pin]["Balance"] -= withdraw
                     time.sleep(2)
-                    print(f"Debit!\nAmt:NGN{Amount}\nTime:{now}\nAvailable Balance:NGN{user_data[Account_number]['Balance']}\n")
+                    print(f"Transaction Successful!\n\nYour Account Balance is ${balance}\n")
                     time.sleep(1)
-                    progress = input("Press 'y' to Continue or 0 to Logout!\n\n>>> ").lower()
+                    con = input("Press 'y' to Continue or 0 to Quit!\n\n>>> ").lower()
                     print("\n")
-                    if progress == 'y':
-                        time.sleep(1)
+                    if con == 'y':
                         continue
-                    elif progress == "0":
-                        time.sleep(1)
+                    elif con == "0":
                         print("Thank You for Banking With Us!\n")
-                        logged_in = False
+                        break
                     else:
                         print("Invalid option!\n")
                         break
 
             # Deposit Option
-            elif progress == "2":
-                Amount = float(input("Enter Amount:\n>>> "))
-                user_data[Account_number]["Balance"] += Amount
-                transaction_log = {}
-                transaction_log[Account_number] = {}
-                data_ = [("Amount",Amount),("Alert Type","Credit"),("Transaction Type","Deposit")]
-                transaction_log[Account_number].update(data_)
+            elif con == "2":
+                deposit = int(input("Enter Amount:\n>>> "))
+                user_data[Pin]["Balance"] += deposit
                 print("\nTransaction in Progress...\n")
                 time.sleep(2)
-                print(f"Credit!\nAmt:NGN{Amount}\nTime:{now}\nAvailable Balance:NGN{user_data[Account_number]['Balance']}\n")
+                print(f"Transaction Successful!\n\nYour Account Balance is ${user_data[Pin]['Balance']}\n")
                 time.sleep(1)
-                progress = input("Press 'y' to Continue or 0 to Logout!\n\n>>> ").lower()
+                con = input("Press 'y' to Continue or 0 to Quit!\n\n>>> ").lower()
                 print("\n")
-                if progress == 'y':
-                    time.sleep(1)
+                if con == 'y':
                     continue
-                elif progress == "0":
-                    time.sleep(1)
+                elif con == "0":
                     print("Thank You for Banking With Us!\n")
-                    logged_in = False
+                    break
                 else:
                     print("Invalid option!\n")
                     break
 
             # Transfer Option
-            elif progress == "3":
-                Amount = float(input("Enter Amount:\n>>> "))
-                recipient_account = input("Enter Recipient Account Number:\n>>> ")
-                recipient = user_data.get(recipient_account, False)
-
-                if recipient:
-                    if Amount >= user_data[Account_number]['Balance']:
-                        time.sleep(1)
-                        print("Insufficient funds!")
-                    else:
-                        user_data[Account_number]['Balance'] -= Amount
-                        recipient['Balance'] += Amount
-                        transaction_log = {}
-                        transaction_log[Account_number] = {}
-                        data_ = [("Amount",Amount),("Alert Type","Debit"),("Transaction Type","Transfer")]
-                        transaction_log[Account_number].update(data_)
-                        print("\nTransaction in Progress...\n")
-                        time.sleep(2)
-                        print(f"Transfer Successful!\nDebit!\nAmt:NGN{Amount}\nTime:{now}\nAvailable Balance:NGN{user_data[Account_number]['Balance']}\n")
-
-                        time.sleep(1)
-                        progress = input("Press 'y' to Continue or 0 to Logout!\n\n>>> ").lower()
-                        print("\n")
-                        if progress == 'y':
-                            time.sleep(1)
-                            continue
-                        elif progress == "0":
-                            time.sleep(1)
-                            print("Thank You for Banking With Us!\n")
-                            logged_in = False
-                        else:
-                            print("Invalid option!\n")
-                            break
+            elif con == "3":
+                transfer = int(input("Enter Amount:\n>>> "))
+                recipient = input("Enter Recipient Account Number:\n>>> ")
+                if (recipient == user_data.get(Pin)):
+                    print("\nTransaction in Progress...\n")
+                    time.sleep(2)
+                    print("Transaction Successful!")
                 else:
+                    print("Transaction Failed!\n\nAccount Number Not Found in Our Data-Base.")
                     time.sleep(1)
-                    print("Transaction Failed!\n\nNo active customer for this account number.")
-                    
+                    con = input("Press 'y' to Continue or 0 to Quit!\n\n>>> ").lower()
+                    print("\n")
+                if con == 'y':
+                    continue
+                elif con == "0":
+                    print("Thank You for Banking With Us!\n")
+                    break
+                else:
+                    print("Invalid option!\n")
+                    break
 
             # Check Balance Option
-            elif progress == "4":
+            elif con == "4":
                 print("\nTransaction in Progress...\n")
                 time.sleep(2)
-                print(f"Your Account Balance is NGN{user_data[Account_number]['Balance']}\n")
+                print(f"Your Account Balance is: ${user_data[Pin]['Balance']}\n")
                 time.sleep(1)
-                progress = input("Press 'y' to Continue or 0 to Logout!\n\n>>> ").lower()
+                con = input("Press 'y' to Continue or 0 to Quit!\n\n>>> ").lower()
                 print("\n")
-                if progress == 'y':
-                    time.sleep(1)
+                if con == 'y':
                     continue
-                elif progress == "0":
-                    time.sleep(1)
+                elif con == "0":
                     print("Thank You for Banking With Us!\n")
-                    logged_in = False
-                else:
-                    print("Invalid option!\n")
                     break
-            # Print Account Statement Option
-            elif progress == "5":
-                print("\nTransaction in Progress...\n")
-                time.sleep(2)
-                print(f"Hello {firstName}, Here is Your Account Statement:\n{transaction_log.get(Account_number)}\n")
-                time.sleep(1)
-                progress = input("Press 'y' to Continue or 0 to Logout!\n\n>>> ").lower()
-                print("\n")
-                if progress == 'y':
-                    time.sleep(1)
-                    continue
-                elif progress == "0":
-                    time.sleep(1)
-                    print("Thank You for Banking With Us!\n")
-                    logged_in = False
                 else:
                     print("Invalid option!\n")
                     break
 
-            # Logout Option
-            elif progress == "0":
-                time.sleep(1)
+            # Quit Option
+            elif con == "0":
                 print("Thank You for Banking With Us!\n")
-                logged_in = False
+                break
             else:
                 print("Please Enter a Valid Option!\n")
             continue
@@ -200,37 +135,32 @@ while keep_running:
 
     elif Activity == "create account":
         for i in range(100):
-            firstName = input("First Name:\n>>> ").title()
-            lastName = input("Last Name:\n>>> ").title()
-            Pin = input("Enter a 4 digit pin:\n>>> ")
+            Pin = input("Enter a 5 digit pin:\n>>> ")
             re_Pin = input("Confirm Pin:\n>>> ")
-            if len(Pin) != 4:
-                print("Pin should be 4 digits.")
+            if len(Pin) != 5:
+                print("Pin should be 5 digits.")
                 validPin = False
             elif Pin != re_Pin:
                 print("Pin doesn't match")
                 validPin = False
             else: 
                 validPin = True
-                Random_num = [str(i) for i in range(10)]
-                Start_Num = ["1"]
-                Start_Num.extend([random.choice(Random_num) for i in range(9)])
-                Account_number = "".join(Start_Num)
-
-                data = [("First Name", firstName),("Last Name", lastName), ("Pin", Pin), ("Balance", 0)]
-                user_data[Account_number] = {}
-                user_data[Account_number].update(data)
+                user_account_num = random.sample(range(11), 9)
+                accountNum_str = [str(i) for i in user_account_num]
+                Account_number = "".join(accountNum_str)
                 time.sleep(1)
                 print("\nGenerating Your Account Number...\n")
                 time.sleep(2)
-                print(f"Hello {firstName}, Your account has been successfully activated!")
-                print(f"Your Account Number is {Account_number}\nYour current balance is NGN0.\nPlease login to perform other transactions.\nThank You!\n")
+                print("Account Number Successfully Generated!")
+                print(f"Your Account Number is {Account_number}\n")
+                user_data[Pin] = {}
+                user_data[Pin]["Account Number"] = Account_number
+                user_data[Pin]["Balance"] = 0
                 break
 
         # Continue Option to Login/ Create Account
-        progress = input("Press 'y' to Continue and Any key to Quit!\n>>> ").lower()
-        if progress == 'y':
-            time.sleep(1)
+        con = input("Press 'y' to Continue and Any key to Quit!\n>>> ").lower()
+        if con == 'y':
             continue
         else:
             break

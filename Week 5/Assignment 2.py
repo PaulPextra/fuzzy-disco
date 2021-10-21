@@ -5,52 +5,25 @@ import ast
 import os
 os.system("cls")
 
-# Writing Customers Data And Transaction Log To A Text File
-def write_to_file(type, data):
-    if type == 'customer':
-        file = 'Week6/customers.txt'
-    elif type == 'transaction':
-        file = 'Week6/transactions.txt'
-
-    with open(file, 'w') as doc_file:
-        doc_file.write(f'{data}')
-
-# Reading Customers & Transaction Log File Data From The Text File
-def read_file_data():
-    customers_file = 'Week6/customers.txt'
-    transactions_file = 'Week6/transactions.txt'
-
-    with open(customers_file, 'r') as customer:
-        read_customer_file = customer.read()
-        customer_data = ast.literal_eval(read_customer_file)
-
-    with open(transactions_file, 'r') as transaction:
-        read_transaction_file = transaction.read()
-        transaction_data = ast.literal_eval(read_transaction_file)
-    
-    return customer_data, transaction_data
-
-# Unpacking Customer & Transaction Data In The Text Files into Their Respective Dictionaries
-user_data, transaction_log = read_file_data()
-
+user_data = {}
+transaction_log = {}
 validPin = True
 keep_running = True
 date = datetime.now()
 now = date.strftime('%x')
 
 def update_transaction_log(Amount, Trans_type, Transaction, Account_number):
-    """This function takes in the amount and other transaction details. 
-    Then it updates the transaction log dictionary. It doesn't return anything."""
+    """This function takes in the amount and other transaction details. Then it updates the transaction dictionary. It doesn't return anything."""
+    
     trans_data = {
         'Amount':Amount,
         'Trans_type':Trans_type,
         'Transaction':Transaction
-    }
+        }
 
     transaction_log[Account_number].append(trans_data)
 
 def generate_acc_num():
-    """This function generates account number for each customer"""
     Random_num = [str(i) for i in range(10)]
     Start_Num = ["1"]
     Start_Num.extend([random.choice(Random_num) for i in range(9)])
@@ -58,6 +31,7 @@ def generate_acc_num():
     
     if Account_number in user_data.keys():
         return generate_acc_num() # Recursive Function
+    
     return Account_number
 
 while keep_running:
@@ -71,6 +45,11 @@ while keep_running:
             print("Pin should be 4 digits!\n")
             continue
 
+        # Reading User Data from Text File
+        # with open("customer.txt", "r") as login:
+        #     # login_data = login.read()
+        #     # str_dict = ast.literal_eval(login_data)
+
         account_details = user_data.get(Account_number, False)
         if account_details and account_details.get('Pin') == Pin:
             time.sleep(2)
@@ -82,7 +61,8 @@ while keep_running:
         logged_in = True
 
         while logged_in: 
-            # ATM Options
+
+            # ATM Options:
             progress = input("1. Withdraw\n2. Deposit\n3. Transfer\n4. Check Balance\n5. Account Statement\n0. Logout!\n>>> ")
             
             # Withdrawal Option
@@ -110,8 +90,13 @@ while keep_running:
                 else:
                     user_data[Account_number]["Balance"] -= Amount
 
-                    # Save Transaction Log of Customer
+                    #save transaction detail
                     update_transaction_log(Amount,"Debit", "Withdrawl", Account_number)
+
+                    # Storing Customer Transaction Log to a text file
+                    with open("customer.txt", "a") as log:
+                        log.write(f"{transaction_log}\n")
+
                     print("\nTransaction in Progress...\n")
                     time.sleep(2)
                     print(f"Debit!\nAmt:NGN{Amount}\nTime:{now}\nAvailable Balance:NGN{user_data[Account_number]['Balance']}\n")
@@ -133,9 +118,11 @@ while keep_running:
             elif progress == "2":
                 Amount = float(input("Enter Amount:\n>>> "))
                 user_data[Account_number]["Balance"] += Amount
-
-                # Save Transaction Log of Customer
                 update_transaction_log(Amount,"Credit", "Deposit", Account_number)
+
+                # Storing Customer Transaction Log to a text file
+                with open("customer.txt", "a") as log:
+                    log.write(f"{transaction_log}\n")
 
                 print("\nTransaction in Progress...\n")
                 time.sleep(2)
@@ -168,13 +155,21 @@ while keep_running:
                     else:
                         user_data[Account_number]['Balance'] -= Amount
 
-                        # Save Transaction Log of Customer
+                        #save transaction detail
                         update_transaction_log(Amount,"Debit", "Transfer", Account_number)
+
+                        # Storing Customer Transaction Log to a text file
+                        with open("customer.txt", "a") as log:
+                            log.write(f"{transaction_log}\n")
 
                         recipient['Balance'] += Amount
 
-                        # Save Transaction Log of Beneficiary/Recipient
+                        #save transaction detail
                         update_transaction_log(Amount,"Credit", "Transfer", recipient_account)
+
+                        # Storing Customer Transaction Log to a text file
+                        with open("customer.txt", "a") as log:
+                            log.write(f"{transaction_log}\n")
                             
                         print("\nTransaction in Progress...\n")
                         time.sleep(2)
@@ -212,7 +207,6 @@ while keep_running:
                 else:
                     print("Invalid option!\n")
                     break
-
             # Print Account Statement Option
             elif progress == "5":
                 if len(transaction_log[Account_number]) > 0:
@@ -276,14 +270,18 @@ while keep_running:
                 user_data[Account_number] = {}
                 user_data[Account_number].update(data)
 
-            # Assign An Empty List as The Value of Every Account Number in Transaction log Dictionary
+            # Storing Customer Data to a text file
+            with open("customer.txt", "a") as Data:
+                Data.write(f"{user_data}\n")
+
+            #Create Empty Transaction log
             transaction_log[Account_number] = []
 
             time.sleep(1)
             print("\nGenerating Your Account Number...\n")
             time.sleep(2)
-            print(f"Hello {firstName}, Your account has been successfully activated!\n")
-            print(f"Your Account Number is {Account_number}\nYour current balance is NGN0.\n\nPlease login to perform other transactions.\nThank You!\n")
+            print(f"Hello {firstName}, Your account has been successfully activated!")
+            print(f"Your Account Number is {Account_number}\nYour current balance is NGN0.\nPlease login to perform other transactions.\nThank You!\n")
             break
 
         # Progress Option to Login/ Create Account
@@ -295,7 +293,5 @@ while keep_running:
             break
     else:
         print("Please Enter a Valid Option!\n")
-        break
+        continue
     
-write_to_file('customer',user_data)
-write_to_file('transaction',transaction_log)
