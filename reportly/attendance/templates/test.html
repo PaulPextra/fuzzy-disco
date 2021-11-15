@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us</title>
+    <title>Book List</title>
 </head>
 <body>
     <h1>This is our first header</h1>
     <h2>This is our second header</h2>
+    <ol>
+        {% for book in books %}
+            <li>{{ book.title | slugify }}</li>
+        {% endfor %}
+    </ol>
 </body>
 </html>
